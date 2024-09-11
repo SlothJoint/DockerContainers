@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: "Change"
+      MYSQL_DATABASE: jellyfin
+      MYSQL_USER: jellyfin
+      MYSQL_PASSWORD: !secret "Change"
+    network_mode: host
+
+  jellyfin:
+    image: linuxserver/jellyfin:10.9.2
+    container_name: jellyfin
+    depends_on:
+      - mariadb
+    environment:
+      DB_HOST: localhost
+      DB_PORT: 3306
+      DB_NAME: jellyfin
+      DB_USER: jellyfin
+      DB_PASSWORD: "Change"
+    volumes:
+      - /mnt/docker_jellyfin/config:/config
+      - /mnt/jellyfin:/media
+    network_mode: host
